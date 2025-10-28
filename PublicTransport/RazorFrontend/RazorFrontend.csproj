@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\PublicTransports\Create.cshtml" />
+      <AdditionalFiles Include="Pages\PublicTransports\Delete.cshtml" />
+      <AdditionalFiles Include="Pages\PublicTransports\Details.cshtml" />
+      <AdditionalFiles Include="Pages\PublicTransports\Edit.cshtml" />
+      <AdditionalFiles Include="Pages\PublicTransports\Index.cshtml" />
+      <AdditionalFiles Include="Pages\ServicePlans\Create.cshtml" />
+      <AdditionalFiles Include="Pages\ServicePlans\Delete.cshtml" />
+      <AdditionalFiles Include="Pages\ServicePlans\Details.cshtml" />
+      <AdditionalFiles Include="Pages\ServicePlans\Edit.cshtml" />
+      <AdditionalFiles Include="Pages\ServicePlans\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PublicTransport\PublicTransport.csproj" />
+    </ItemGroup>
+
+</Project>

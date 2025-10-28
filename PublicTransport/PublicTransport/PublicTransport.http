@@ -1,0 +1,62 @@
+@PublicTransport_HostAddress = http://localhost:5124
+
+
+GET {{PublicTransport_HostAddress}}/PublicTransport
+Accept: application/json
+
+###
+POST {{PublicTransport_HostAddress}}/api/PublicTransport
+Accept: application/json
+Content-Type: application/json
+
+{
+  "transportType": "Train",
+  "isEnabled": true,
+  "hoursSinceLastService": 0,
+  "servicePlans": [
+    {
+      "type": "Fahrgestellüberprüfung",
+      "timeStamp": "2025-09-22T18:48:02Z",
+      "duration": 6.8,
+      "description": "Neue Räder wurden auf den Waggons installiert"
+    }
+  ]
+}
+
+###
+@id = 1
+GET {{PublicTransport_HostAddress}}/api/PublicTransport/{{id}}
+Accept: application/json
+
+###
+PUT {{PublicTransport_HostAddress}}/PublicTransport/{{id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Type": "generalwartung",
+    "HoursSinceLastService": 112,
+    "IsEnabled": true,
+    "ServicePlans": []
+}
+
+###
+DELETE {{PublicTransport_HostAddress}}/PublicTransport/{{id}}
+Accept: application/json
+
+###
+GET {{PublicTransport_HostAddress}}/ServicePlan
+Accept: application/json
+
+###
+@ptId = 1
+POST {{PublicTransport_HostAddress}}/ServicePlan/{{ptId}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "Type": "generalwartung",
+    "TimeStamp": "2025-09-22T11:01:00Z",
+    "Duration": 2.4,
+    "Description": "Alles kaputt"
+}

@@ -1,0 +1,48 @@
+@page
+@model RazorFrontend.Pages.PublicTransports.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Public Transports of Austrian Public Transport eGen</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PublicTransport[0].TransportType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublicTransport[0].IsEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublicTransport[0].HoursSinceLastService)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.PublicTransport) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransportType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HoursSinceLastService)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

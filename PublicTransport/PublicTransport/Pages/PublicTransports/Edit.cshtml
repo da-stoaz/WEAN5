@@ -1,0 +1,115 @@
+@page
+@model PublicTransport.Pages.PublicTransports.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>PublicTransport</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PublicTransport.Id"/>
+            <div class="form-group">
+
+                <label asp-for="PublicTransport.TransportType" class="control-label"></label>
+                <input asp-for="PublicTransport.TransportType" class="form-control"/>
+                <span asp-validation-for="PublicTransport.TransportType" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+
+                <label class="form-check-label">
+                    <input class="form-check-input"
+                           asp-for="PublicTransport.IsEnabled"/> @Html.DisplayNameFor(model => model.PublicTransport.IsEnabled)
+                </label>
+            </div>
+            <div class="form-group">
+
+                <label asp-for="PublicTransport.HoursSinceLastService" class="control-label"></label>
+                <input asp-for="PublicTransport.HoursSinceLastService" class="form-control"/>
+                <span asp-validation-for="PublicTransport.HoursSinceLastService" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+    
+     <div class="form-group">
+        <h4>Service Plans</h4>
+        @if (Model.PublicTransport.ServicePlans.Any())
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.PublicTransport.ServicePlans.First().Id)</th>
+                    <th>Service Type</th>
+                    <th>@Html.DisplayNameFor(model => model.PublicTransport.ServicePlans.First().TimeStamp)</th>
+                    <th>Duration</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var plan in Model.PublicTransport.ServicePlans)
+                {
+                    <tr>
+                        <td>@plan.Id</td>
+                        <td>@plan.Type</td>
+                        <td>@plan.TimeStamp</td>
+                        <td>@plan.Duration</td>
+                        <td>@plan.Description</td>
+                        <td>
+                            <form method="post" asp-page-handler="RemoveServicePlan">
+                                <input type="hidden" name="publicTransportId" value="@Model.PublicTransport.Id"/>
+                                <input type="hidden" name="servicePlanId" value="@plan.Id"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No service plans assigned to this public transport.</p>
+        }
+
+        <hr/>
+        <h4>Add New Service Plan</h4>
+        @if (Model.AvailableServicePlans.Any())
+        {
+            <form method="post" asp-page-handler="AddServicePlan">
+                <input type="hidden" name="publicTransportId" value="@Model.PublicTransport.Id"/>
+                <div class="form-group">
+                    <label asp-for="SelectedServicePlanId" class="control-label"></label>
+                    <select asp-for="SelectedServicePlanId"
+                            asp-items="@(new SelectList(Model.AvailableServicePlans.Select(sp => new { Id = sp.Id, Display = $"{sp.Type} - {sp.Description}" }), "Id", "Display"))"
+                            class="form-control">
+                        <option value="">-- Select Service Plan --</option>
+                    </select>
+                    <span asp-validation-for="SelectedServicePlanId" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-2">
+                    <button type="submit" class="btn btn-primary">Add Service Plan</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>No available service plans to add.</p>
+        }
+    </div>
+    
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+

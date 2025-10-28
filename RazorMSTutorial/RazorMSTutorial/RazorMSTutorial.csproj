@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Movies\" />
+      <Folder Include="Pages\ServicePlans\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.9" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\ServicePlan\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\ServicePlan\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\ServicePlan\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\ServicePlan\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\ServicePlan\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\PublicTransport\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\PublicTransport\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\PublicTransport\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\PublicTransport\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\PublicTransport\Index.cshtml" />
+    </ItemGroup>
+
+</Project>
