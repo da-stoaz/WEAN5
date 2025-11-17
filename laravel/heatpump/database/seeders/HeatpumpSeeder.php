@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Heatpump;
+use App\Models\PerformanceData;
 
 class HeatpumpSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class HeatpumpSeeder extends Seeder
      */
     public function run(): void
     {
-        Heatpump::factory()->count(12)->create();
+        Heatpump::factory(12)
+        ->has(PerformanceData::factory()->count(20))
+        ->create();
     }
 }

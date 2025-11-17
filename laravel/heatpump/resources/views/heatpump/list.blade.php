@@ -12,7 +12,7 @@
                 {{ $heatpump->name }}
             </p>
             <p>{{ $heatpump->type }}</p>
-            <p>{{ $heatpump->timestamp }}</p>
+            <p>{{ $heatpump->updated_at }}</p>
         </div>
 
 

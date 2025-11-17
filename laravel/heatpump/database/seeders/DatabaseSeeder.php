@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             HeatpumpSeeder::class,
+            //PerfomanceDataSeeder is called within the HeatpumpSeeder.
+            //PerformanceDataSeeder::class,
         ]);
     }
 }
