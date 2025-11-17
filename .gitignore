@@ -21,3 +21,9 @@
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*.idea/
+*bin/
+*obj/
+
+*lara_mysql_data/
