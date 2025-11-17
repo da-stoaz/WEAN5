@@ -1,0 +1,26 @@
+# --- Build Results (Your specific request) ---
+[Bb]in/
+[Oo]bj/
+
+# --- Visual Studio specific ---
+.vs/
+*.user
+*.suo
+*.userprefs
+
+# --- VS Code ---
+.vscode/
+
+# --- User-specific configuration ---
+*.lock.json
+# runtimeconfig.dev.json is generated during build
+*.runtimeconfig.dev.json
+
+# --- Secrets and Local Config ---
+# Prevent committing local connection strings or keys
+appsettings.Development.json
+.env
+
+# --- OS Generated ---
+.DS_Store
+Thumbs.db
