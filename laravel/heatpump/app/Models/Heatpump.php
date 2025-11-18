@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Heatpump extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'type'];
     protected $table = "heatpump";
 
     protected $casts = [

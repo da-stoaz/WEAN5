@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HeatpumpType;
 use App\Models\Heatpump;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Enum;
 
 class HeatpumpController extends Controller
 {
@@ -21,7 +24,7 @@ class HeatpumpController extends Controller
      */
     public function create()
     {
-        //
+        return view("heatpump.create");
     }
 
     /**
@@ -29,7 +32,16 @@ class HeatpumpController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $data = $request->validate([
+            "name" => "required|string|max:128",
+            "type" => ["required", new Enum(HeatpumpType::class)]
+        ]);
+        Heatpump::create($data);
+
+        return redirect()->route('heatpump.list')
+            ->with('success', 'Heatpump created successfully!');
     }
 
     /**
