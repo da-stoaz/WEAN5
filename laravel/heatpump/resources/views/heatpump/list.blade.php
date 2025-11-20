@@ -24,7 +24,7 @@
             <td>{{ $heatpump->updated_at }} </td>
             <td>
                 <a href="{{ route('heatpump.show', $heatpump->id) }}"
-                    class="bg-blue-400/40 py-2 px-4 rounded-md">
+                    class="bg-blue-400/40 py-2 px-4 rounded-md smallcaps">
                     show
                 </a>
 
