@@ -5,13 +5,14 @@
 @section("content")
 <h1 class="text-2xl">Heatpumps</h1>
 
-<table class="" id="myTable">
+<table class="" id="listTable">
     <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Type</th>
             <th>Updated At</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -20,9 +21,15 @@
             <td>{{ $heatpump->id }}</td>
             <td>{{ $heatpump->name }}</td>
             <td>{{ $heatpump->type }}</td>
-            <td>{{ $heatpump->updated_at }}</td>
-        </tr>
+            <td>{{ $heatpump->updated_at }} </td>
+            <td>
+                <a href="{{ route('heatpump.show', $heatpump->id) }}"
+                    class="bg-blue-400/40 py-2 px-4 rounded-md">
+                    show
+                </a>
 
+            </td>
+        </tr>
         @endforeach
 
     </tbody>
@@ -32,7 +39,9 @@
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#listTable').DataTable({
+            stateSave: true,
+        });
     });
 </script>
 

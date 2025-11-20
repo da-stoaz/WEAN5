@@ -12,6 +12,8 @@ class PerformanceData extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [];
+
     public function heatpump()
     {
         return $this->belongsTo(Heatpump::class);

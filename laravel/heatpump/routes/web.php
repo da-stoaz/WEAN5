@@ -11,3 +11,7 @@ Route::get('/heatpumps', [HeatpumpController::class, 'index'])->name('heatpump.l
 
 Route::get("/heatpumps/create", [HeatpumpController::class, "create"])->name("heatpump.create");
 Route::post("/heatpumps", [HeatpumpController::class, "store"])->name("heatpump.store");
+
+
+Route::get('/heatpumps/{heatpump}', [HeatpumpController::class, 'show'])->name('heatpump.show');
+;
