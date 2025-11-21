@@ -59,7 +59,7 @@ class HeatpumpController extends Controller
      */
     public function edit(Heatpump $heatpump)
     {
-        //
+        return view('heatpump.edit', compact('heatpump'));
     }
 
     /**

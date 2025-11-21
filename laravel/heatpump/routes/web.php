@@ -5,7 +5,7 @@ use App\Models\Heatpump;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    
+
     // Get Variable Data from db for Dashboard
 
     $totalHeatpumps = Heatpump::count();
@@ -30,3 +30,5 @@ Route::post("/heatpumps", [HeatpumpController::class, "store"])->name("heatpump.
 
 
 Route::get('/heatpumps/{heatpump}', [HeatpumpController::class, 'show'])->name('heatpump.show');;
+
+Route::get("/heatpumps/{heatpump}/edit", [HeatpumpController::class, "edit"])->name("heatpump.edit");

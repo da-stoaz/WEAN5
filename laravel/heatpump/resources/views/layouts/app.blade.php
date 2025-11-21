@@ -79,7 +79,7 @@
                 </h1>
             </div>
 
-            <div class="flex-shrink-0">
+            <div class="flex shrink-0">
                 @yield('action_button')
             </div>
         </div>
