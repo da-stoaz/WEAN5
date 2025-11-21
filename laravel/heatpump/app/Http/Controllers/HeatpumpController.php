@@ -70,9 +70,14 @@ class HeatpumpController extends Controller
         //
     }
 
+    public function delete(Heatpump $heatpump){
+        return view("heatpump.delete", compact("heatpump"));
+    }
+
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(Heatpump $heatpump)
     {
         //

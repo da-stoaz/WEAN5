@@ -1,9 +1,9 @@
 @extends("layouts.app")
 
 {{-- Set the page title to just the action, as the name is now in the breadcrumb --}}
-@section("title", "Edit Heatpump " . $heatpump->name)
+@section("title", "Delete Heatpump " . $heatpump->name)
 
-@section("h1_title", "Edit Heatpump " . $heatpump->name)
+@section("h1_title", "Delete Heatpump " . $heatpump->name)
 
 
 @section('breadcrumbs')
@@ -35,6 +35,6 @@
 @endsection
 
 @section("content")
-<h1>Editing: {{ $heatpump->name }}</h1>
+<h1>Deleting: {{ $heatpump->name }}</h1>
 
 @endsection

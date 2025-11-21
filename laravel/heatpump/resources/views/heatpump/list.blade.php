@@ -2,6 +2,22 @@
 
 @section("title", "Heatpump List")
 
+@section('h1_title', 'Heatpump List') 
+
+
+@section('breadcrumbs')
+    
+    {{-- A. Link back to the Heatpump List --}}
+    <li class="inline-flex items-center">
+        <a href="{{ route('heatpump.list') }}" class="hover:text-blue-600 transition-colors">
+            Heatpumps
+        </a>
+    </li>
+    
+   
+   
+@endsection
+
 @section("action_button")
 
 <a href="{{ route(name: "heatpump.create") }}" class="bg-amber-400/40 py-2 px-4 rounded-md smallcaps">

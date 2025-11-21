@@ -32,3 +32,5 @@ Route::post("/heatpumps", [HeatpumpController::class, "store"])->name("heatpump.
 Route::get('/heatpumps/{heatpump}', [HeatpumpController::class, 'show'])->name('heatpump.show');;
 
 Route::get("/heatpumps/{heatpump}/edit", [HeatpumpController::class, "edit"])->name("heatpump.edit");
+
+Route::get("/heatpumps/{heatpump}/delete", [HeatpumpController::class,"delete"])->name("heatpump.delete");

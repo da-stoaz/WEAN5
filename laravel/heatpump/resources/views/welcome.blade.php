@@ -3,6 +3,7 @@
 {{-- 1. Title sets the H1 and the Browser Tab title --}}
 @section('title', 'Dashboard')
 
+@section('h1_title', 'Dashboard') 
 
 {{-- 3. Optional: A global dashboard action --}}
 @section('action_button')
