@@ -2,11 +2,14 @@
 
 @section("title", "Heatpump List")
 
-@section("content")
-<h1 class="text-2xl">Heatpumps</h1>
+@section("action_button")
 
 <a href="{{ route(name: "heatpump.create") }}" class="bg-amber-400/40 py-2 px-4 rounded-md smallcaps">
     Add heatpump</a>
+
+@endsection
+
+@section("content")
 
 <table class="" id="listTable">
     <thead>

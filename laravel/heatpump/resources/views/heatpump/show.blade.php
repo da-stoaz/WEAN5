@@ -2,15 +2,18 @@
 
 @section("title", "Heatpump " . $heatpump->name)
 
-@section("content")
-<div class="flex flex-row items-center justify-start gap-3">
-    <a href="{{ url()->previous() }}"
-        class="text-lg px-2 py-1 border border-black/20 shadow bg-gray-300 rounded-lg">
-        &lt; Back
-    </a>
-    <h1 class="text-3xl">{{ $heatpump->id }} Heatpump</h1>
 
-</div>
+@section('breadcrumbs')
+    <li class="inline-flex items-center">
+        {{-- Link back to the Level 2 list --}}
+        <a href="{{ route('heatpump.list') }}" class="hover:text-blue-600 transition-colors">
+            Heatpumps
+        </a>
+    </li>
+@endsection
+
+@section("content")
+
 
 <section>
     <div>ID: {{ $heatpump->id }}</div>

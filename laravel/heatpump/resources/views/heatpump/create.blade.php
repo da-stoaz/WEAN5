@@ -2,12 +2,21 @@
 
 @section("title", "Create Heatpump")
 
+@section('breadcrumbs')
+    <li class="inline-flex items-center">
+        {{-- Link back to the Level 2 list --}}
+        <a href="{{ route('heatpump.list') }}" class="hover:text-blue-600 transition-colors">
+            Heatpumps
+        </a>
+    </li>
+@endsection
+
+
+
 @section("content")
-<h1 class="text-3xl">Create new Heatpump</h1>
 
+<!-- Partials is there for status information -->
 
-{{-- BEST PRACTICE: Include the partial. Do not hardcode alerts here. --}}
-{{-- This assumes your file is saved at resources/views/partials/flash.blade.php --}}
 @include('partials.flash')
 
 <form id="create-heatpump-form" action="{{ route('heatpump.store') }}" method="POST" class="flex flex-col gap-4 max-w-md">
