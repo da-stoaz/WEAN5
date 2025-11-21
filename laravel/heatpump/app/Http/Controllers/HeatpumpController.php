@@ -32,7 +32,7 @@ class HeatpumpController extends Controller
      */
     public function store(Request $request)
     {
-
+    
 
         $data = $request->validate([
             "name" => "required|string|max:128",
@@ -50,7 +50,7 @@ class HeatpumpController extends Controller
     public function show(Heatpump $heatpump)
     {
         $heatpumps = Heatpump::all();
-        
+
         return view('heatpump.show', compact('heatpump'));
     }
 

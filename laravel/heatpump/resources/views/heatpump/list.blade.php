@@ -5,6 +5,9 @@
 @section("content")
 <h1 class="text-2xl">Heatpumps</h1>
 
+<a href="{{ route(name: "heatpump.create") }}" class="bg-amber-400/40 py-2 px-4 rounded-md smallcaps">
+    Add heatpump</a>
+
 <table class="" id="listTable">
     <thead>
         <tr>

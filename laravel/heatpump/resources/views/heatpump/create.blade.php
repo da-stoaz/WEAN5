@@ -3,14 +3,81 @@
 @section("title", "Create Heatpump")
 
 @section("content")
+<h1 class="text-3xl">Create new Heatpump</h1>
 
-<form action="{{ route('heatpump.store') }}" method="POST">
+
+{{-- BEST PRACTICE: Include the partial. Do not hardcode alerts here. --}}
+{{-- This assumes your file is saved at resources/views/partials/flash.blade.php --}}
+@include('partials.flash')
+
+<form id="create-heatpump-form" action="{{ route('heatpump.store') }}" method="POST" class="flex flex-col gap-4 max-w-md">
     @csrf
-    <label for="name">Name:</label>
-    <input class="border rounded-md" type="text" name="name">
-    <label for="type">Type: </label>
-    <input class="border rounded-md" type="text" name="type">
-    <button class="bg-blue-400/40 py-2 px-4 rounded-md" type="submit">submit</button>
+
+    {{-- Name Field --}}
+    <div>
+        <label for="name" class="block font-bold mb-1 text-gray-700">Name:</label>
+        <input
+            class="border rounded-md p-2 w-full focus:ring-2 focus:ring-blue-400 outline-none 
+                @error('name') border-red-500  @enderror"
+            type="text"
+            name="name"
+            id="name"
+            value="{{ old('name') }}"
+            placeholder="e.g. Alpha Unit 1">
+
+        @error('name')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- Type Field --}}
+    <div>
+        <label for="type" class="block font-bold mb-1 text-gray-700">Type:</label>
+        <select
+            class="border rounded-md p-2 w-full bg-white focus:ring-2 focus:ring-blue-400 outline-none
+                @error('type') border-red-500 @enderror"
+            name="type"
+            id="type">
+            <option value="" disabled selected>-- Select a Heatpump Type --</option>
+            @foreach(\App\Enums\HeatpumpType::cases() as $type)
+            <option
+                value="{{ $type->value }}"
+                {{ old('type') == $type->value ? 'selected' : '' }}>
+                {{ $type->value }}
+            </option>
+            @endforeach
+        </select>
+
+        @error('type')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- Submit Button with Spinner --}}
+    <button id="submit-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md flex items-center justify-center transition-all shadow-sm" type="submit">
+
+        <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+
+        <span id="btn-text">Create Heatpump</span>
+    </button>
 </form>
+
+{{-- Frontend Interaction Logic --}}
+<script>
+    document.getElementById('create-heatpump-form').addEventListener('submit', function() {
+        const btn = document.getElementById('submit-btn');
+        const spinner = document.getElementById('spinner');
+        const text = document.getElementById('btn-text');
+
+        // Disable button and show spinner
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+        spinner.classList.remove('hidden');
+        text.innerText = 'Saving...';
+    });
+</script>
 
 @endsection
