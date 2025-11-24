@@ -34,3 +34,4 @@ Route::get('/heatpumps/{heatpump}', [HeatpumpController::class, 'show'])->name('
 Route::get("/heatpumps/{heatpump}/edit", [HeatpumpController::class, "edit"])->name("heatpump.edit");
 
 Route::get("/heatpumps/{heatpump}/delete", [HeatpumpController::class,"delete"])->name("heatpump.delete");
+Route::delete("/heatpumps/{heatpump}", [HeatpumpController::class,"destroy"])->name("heatpump.destroy");

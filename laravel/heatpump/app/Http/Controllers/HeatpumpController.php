@@ -80,6 +80,9 @@ class HeatpumpController extends Controller
 
     public function destroy(Heatpump $heatpump)
     {
-        //
+        $heatpump->delete();
+
+        return redirect()->route('heatpump.list')
+            ->with('success', 'Heatpump deleted successfully.');
     }
 }
