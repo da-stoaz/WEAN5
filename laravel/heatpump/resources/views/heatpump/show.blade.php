@@ -111,7 +111,7 @@
     $(document).ready(function() {
         const table = $('#performanceDataTable').DataTable({
             ajax: {
-                url: "{{ route('performance.data') }}",
+                url: "{{ route('performance.data', absolute: false) }}",
                 type: "GET",
                 data: function(d) {
                     d.filters = {
@@ -185,7 +185,7 @@
             if (!confirm('Delete this log?')) return;
 
             $.ajax({
-                url: "{{ route('performance.data.delete', '__ID__') }}".replace('__ID__', id),
+                url: "{{ route('performance.data.delete', ['performanceData' => '__ID__'], absolute: false) }}".replace('__ID__', id),
                 type: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"

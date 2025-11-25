@@ -88,7 +88,7 @@
 
         const heatpumpAjaxTable = $('#heatpumpTableAjax').DataTable({
             ajax: {
-                url: "{{ route('heatpump.data') }}",
+                url: "{{ route('heatpump.data', absolute: false) }}",
                 type: "POST"
             },
             processing: true,
@@ -137,7 +137,7 @@
             serverSide: true,
             pageLength: 10,
             ajax: {
-                url: "{{ route('performance.data') }}",
+                url: "{{ route('performance.data', absolute: false) }}",
                 type: "POST",
                 dataSrc: function(json) {
                     return json.data || [];

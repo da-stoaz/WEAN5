@@ -124,7 +124,7 @@
             pageLength: 10,
             stateSave: true,
             ajax: {
-                url: "{{ route('performance.data') }}",
+                url: "{{ route('performance.data', absolute: false) }}",
                 type: "POST",
                 data: function(d) {
                     const formData = Object.fromEntries(new FormData($filters[0]));
