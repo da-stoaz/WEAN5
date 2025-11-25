@@ -3,7 +3,7 @@
 {{-- Set the page title to just the action, as the name is now in the breadcrumb --}}
 @section("title", "Delete Heatpump " . $heatpump->name)
 
-@section("h1_title", "Delete Heatpump " . $heatpump->name)
+@section("h1_title", content: "Delete Heatpump " . $heatpump->name)
 
 
 @section('breadcrumbs')

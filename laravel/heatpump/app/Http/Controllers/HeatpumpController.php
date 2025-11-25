@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\HeatpumpType;
 use App\Models\Heatpump;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Enum;
 
@@ -68,6 +69,32 @@ class HeatpumpController extends Controller
     public function update(Request $request, Heatpump $heatpump)
     {
         //
+    }
+
+    public function datatablesDemo()
+    {
+        $heatpumps = Heatpump::all();
+
+        return view('heatpump.datatables', compact('heatpumps'));
+    }
+
+    public function getHeatpumpData(Request $request): JsonResponse
+    {
+        try {
+            $heatpumps = Heatpump::query()
+                ->select(['id', 'name', 'type', 'updated_at'])
+                ->get();
+
+            return response()->json(['data' => $heatpumps]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'draw' => (int) $request->input('draw'),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => [],
+                'error' => 'Could not load heatpumps: '.$e->getMessage(),
+            ]);
+        }
     }
 
     public function delete(Heatpump $heatpump){

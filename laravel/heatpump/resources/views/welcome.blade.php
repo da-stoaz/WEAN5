@@ -61,7 +61,6 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
-            {{-- Replace # with route('heatpumps.index') --}}
             <a href="{{ route("heatpump.list") }}" class="group block p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:ring-1 hover:ring-blue-400 transition-all">
                 <div class="flex items-center gap-4">
                     <div class="p-3 bg-blue-100 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -74,7 +73,7 @@
                 </div>
             </a>
 
-            <a href="#" class="group block p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:ring-1 hover:ring-blue-400 transition-all">
+            <a href="{{ route("performance.list") }}" class="group block p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:ring-1 hover:ring-blue-400 transition-all">
                 <div class="flex items-center gap-4">
                     <div class="p-3 bg-purple-100 text-purple-600 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
