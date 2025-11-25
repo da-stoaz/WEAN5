@@ -25,8 +25,9 @@ class PerformanceDataFactory extends Factory
 
             "outside_temp" => $this->faker->randomFloat(1, -10, 20),
             "inside_temp" => $this->faker->randomFloat(1, 19, 23),
-            "supply_line_temp" => $supplyTemp,
-            "return_line_temp" => $returnTemp,
+            "supply_temp" => $supplyTemp,
+            "return_temp" => $returnTemp,
+            "recorded_at" => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }
