@@ -39,6 +39,8 @@ Route::get("/heatpumps/{heatpump}/delete", [HeatpumpController::class,"delete"])
 Route::delete("/heatpumps/{heatpump}", [HeatpumpController::class,"destroy"])->name("heatpump.destroy");
 
 Route::get("/performance", [PerformanceDataController::class, "index"])->name("performance.list");
+Route::get('/heatpumps/{heatpump}/logs/create', [PerformanceDataController::class, 'createForHeatpump'])->name('performance.create');
+Route::post('/heatpumps/{heatpump}/logs', [PerformanceDataController::class, 'storeForHeatpump'])->name('performance.store');
 
 
 Route::match(['get', 'post'], '/api/heatpumps', [HeatpumpController::class, 'getHeatpumpData'])

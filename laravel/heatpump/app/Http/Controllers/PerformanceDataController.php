@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Heatpump;
 use App\Models\PerformanceData;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -15,7 +16,8 @@ class PerformanceDataController extends Controller
     public function index()
     {
         $data = PerformanceData::orderBy("created_at","desc");
-        return view("performance.list", compact("data"));
+        $heatpumps = Heatpump::orderBy('name')->get(['id', 'name']);
+        return view("performance.list", compact("data", "heatpumps"));
     }
 
     /**
@@ -135,5 +137,29 @@ class PerformanceDataController extends Controller
                 'error' => 'Could not load performance data: '.$e->getMessage(),
             ]);
         }
+    }
+
+    public function createForHeatpump(Heatpump $heatpump)
+    {
+        return view('performance.create', compact('heatpump'));
+    }
+
+    public function storeForHeatpump(Request $request, Heatpump $heatpump)
+    {
+        $data = $request->validate([
+            'outside_temp' => ['required', 'numeric'],
+            'inside_temp' => ['required', 'numeric'],
+            'supply_temp' => ['required', 'numeric'],
+            'return_temp' => ['required', 'numeric'],
+            'recorded_at' => ['nullable', 'date'],
+        ]);
+
+        $data['heatpump_id'] = $heatpump->id;
+        $data['recorded_at'] = $data['recorded_at'] ?? now();
+
+        PerformanceData::create($data);
+
+        return redirect()->route('heatpump.show', $heatpump)
+            ->with('success', 'Performance log added successfully.');
     }
 }

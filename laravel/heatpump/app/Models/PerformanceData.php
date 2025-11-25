@@ -12,7 +12,18 @@ class PerformanceData extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'heatpump_id',
+        'outside_temp',
+        'inside_temp',
+        'supply_temp',
+        'return_temp',
+        'recorded_at',
+    ];
+
+    protected $casts = [
+        'recorded_at' => 'datetime',
+    ];
 
     public function heatpump()
     {

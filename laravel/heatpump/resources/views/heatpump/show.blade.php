@@ -77,9 +77,15 @@
 </section>
 
 <section class="mt-6">
-    <div class="border-b pb-2">
-        <h2 class="text-2xl font-bold inline">Logs</h2>
-        <span class="text-xs uppercase tracking-wide text-gray-500 ml-0.5 inline-block">(AJAX)</span>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-2 gap-2">
+        <div>
+            <h2 class="text-2xl font-bold inline">Logs</h2>
+            <span class="text-xs uppercase tracking-wide text-gray-500 ml-0.5 inline-block">(AJAX)</span>
+        </div>
+        <a href="{{ route('performance.create', $heatpump) }}"
+            class="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 shadow-sm">
+            Add log
+        </a>
     </div>
     <div class="relative overflow-x-auto">
         <table id="performanceDataTable" class="min-w-full divide-y divide-gray-200">
@@ -142,6 +148,12 @@
                     render: function(row) {
                         return `<button class="text-red-600 hover:text-red-800 delete-log cursor-pointer border px-2  rounded-md border-red-300" data-id="${row.id}">Delete</button>`;
                     }
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: "_all",
+                    className: "px-3 py-2 text-sm"
                 }
             ]
         });
