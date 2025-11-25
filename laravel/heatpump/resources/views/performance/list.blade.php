@@ -2,6 +2,8 @@
 
 @section("h1_title", content: "Performance Data")
 
+@section("title", "Performance Data")
+
 @section("breadcrumbs")
 <li class="inline-flex items-center" id="breadcrumb">
     <a href="{{ route('performance.list') }}" class="hover:text-blue-600 transition-colors">

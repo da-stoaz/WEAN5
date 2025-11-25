@@ -49,3 +49,6 @@ Route::match(['get', 'post'], '/api/performance-data', [PerformanceDataControlle
     ->withoutMiddleware('web')
     ->middleware('api')
     ->name('performance.data');
+
+Route::delete('/performance-data/{performanceData}', [PerformanceDataController::class, 'destroy'])
+    ->name('performance.data.delete');

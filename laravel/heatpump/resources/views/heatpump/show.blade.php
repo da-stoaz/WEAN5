@@ -36,7 +36,7 @@
         Edit Details
     </a>
     <a href="{{ route('heatpump.delete', $heatpump) }}"
-        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 bg-red-400 border border-gray-300 rounded-lg hover:bg-red-500 focus:ring-4 focus:ring-gray-100 transition-colors shadow-sm">
+        class="inline-flex items-center capitalize justify-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 bg-red-400 border border-gray-300 rounded-lg hover:bg-red-500 focus:ring-4 focus:ring-gray-100 transition-colors shadow-sm">
 
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M1 5h22m-8.75-4h-4.5a1.5 1.5 0 0 0-1.5 1.5V5h7.5V2.5a1.5 1.5 0 0 0-1.5-1.5m-4.5 16.75v-7.5m4.5 7.5v-7.5m4.61 11.37A1.49 1.49 0 0 1 17.37 23H6.63a1.49 1.49 0 0 1-1.49-1.38L3.75 5h16.5z" />
@@ -77,41 +77,93 @@
 </section>
 
 <section class="mt-6">
-    <h2 class="text-2xl font-bold border-b pb-2">Logs</h2>
-    <table id="performanceData">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Outside (°C)</th>
-                <th>Inside (°C)</th>
-                <th>Supply (°C)</th>
-                <th>Return (°C)</th>
-                <th>Recorded at</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($heatpump->performanceData as $log)
-            <tr>
-                <td>{{ $log->id }}</td>
-                <td>{{ $log->outside_temp }}</td>
-                <td>{{ $log->inside_temp }}</td>
-                <td>{{ $log->supply_temp }}</td>
-                <td>{{ $log->return_temp }}</td>
-                <td>{{ $log->recorded_at }}</td>
-            </tr>
-
-            @endforeach
-
+    <div class="border-b pb-2">
+        <h2 class="text-2xl font-bold inline">Logs</h2>
+        <span class="text-xs uppercase tracking-wide text-gray-500 ml-0.5 inline-block">(AJAX)</span>
+    </div>
+    <div class="relative overflow-x-auto">
+        <table id="performanceDataTable" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Outside (°C)</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inside (°C)</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supply (°C)</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return (°C)</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recorded at</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                </tr>
             </thead>
-    </table>
-
+            <tbody></tbody>
+        </table>
+    </div>
 </section>
+
 
 
 <script>
     $(document).ready(function() {
-        $('#performanceData').DataTable({
+        const table = $('#performanceDataTable').DataTable({
+            ajax: {
+                url: "{{ route('performance.data') }}",
+                type: "GET",
+                data: function(d) {
+                    d.filters = {
+                        heatpump_id: "{{ $heatpump->id }}"
+                    };
+                }
+            },
+            processing: true,
+            serverSide: true,
             stateSave: true,
+            pageLength: 10,
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'outside_temp'
+                },
+                {
+                    data: 'inside_temp'
+                },
+                {
+                    data: 'supply_temp'
+                },
+                {
+                    data: 'return_temp'
+                },
+                {
+                    data: 'recorded_at'
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(row) {
+                        return `<button class="text-red-600 hover:text-red-800 delete-log cursor-pointer border px-2  rounded-md border-red-300" data-id="${row.id}">Delete</button>`;
+                    }
+                }
+            ]
+        });
+
+        $('#performanceDataTable').on('click', '.delete-log', function() {
+            const id = $(this).data('id');
+            if (!confirm('Delete this log?')) return;
+
+            $.ajax({
+                url: "{{ route('performance.data.delete', '__ID__') }}".replace('__ID__', id),
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function() {
+                    table.ajax.reload(null, false);
+                },
+                error: function(xhr) {
+                    alert('Delete failed');
+                    console.error(xhr.responseText);
+                }
+            });
         });
     });
 </script>

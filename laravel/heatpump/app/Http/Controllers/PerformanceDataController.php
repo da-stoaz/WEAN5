@@ -63,7 +63,11 @@ class PerformanceDataController extends Controller
      */
     public function destroy(PerformanceData $performanceData)
     {
-        //
+        $performanceData->delete();
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
     }
 
     public function data(Request $request)
@@ -73,6 +77,9 @@ class PerformanceDataController extends Controller
 
             $query = PerformanceData::query()
                 ->with('heatpump')
+                ->when(isset($filters['heatpump_id']) && $filters['heatpump_id'] !== '', function ($q) use ($filters) {
+                    $q->where('heatpump_id', $filters['heatpump_id']);
+                })
                 ->when(!empty($filters['heatpump']), function ($q) use ($filters) {
                     $name = $filters['heatpump'];
                     $q->whereHas('heatpump', function ($hp) use ($name) {
