@@ -77,7 +77,7 @@
 </section>
 
 <section class="mt-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-2 gap-2">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-2 gap-2 mb-6">
         <div>
             <h2 class="text-2xl font-bold inline">Logs</h2>
             <span class="text-xs uppercase tracking-wide text-gray-500 ml-0.5 inline-block">(AJAX)</span>
@@ -87,7 +87,7 @@
             Add log
         </a>
     </div>
-    <div class="relative overflow-x-auto">
+    <div class="relative overflow-x-auto bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <table id="performanceDataTable" class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -154,6 +154,28 @@
                 {
                     targets: "_all",
                     className: "px-3 py-2 text-sm"
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: "_all",
+                    className: "px-3 py-2 text-sm"
+                },
+                {
+                    targets: 5,
+                    render: function(data) {
+                        if (!data) return '';
+                        const date = new Date(data);
+                        if (Number.isNaN(date.getTime())) return data;
+                        const formatter = new Intl.DateTimeFormat(undefined, {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        return formatter.format(date);
+                    }
                 }
             ]
         });

@@ -113,12 +113,14 @@ class PerformanceDataController extends Controller
                     $q->where('return_temp', '<=', $filters['return_max']);
                 })
                 ->when(!empty($filters['recorded_from']), function ($q) use ($filters) {
-                    if ($date = Carbon::parse($filters['recorded_from'], null)) {
+                    $date = $this->parseEuropeanDate($filters['recorded_from']);
+                    if ($date) {
                         $q->whereDate('recorded_at', '>=', $date);
                     }
                 })
                 ->when(!empty($filters['recorded_to']), function ($q) use ($filters) {
-                    if ($date = Carbon::parse($filters['recorded_to'], null)) {
+                    $date = $this->parseEuropeanDate($filters['recorded_to']);
+                    if ($date) {
                         $q->whereDate('recorded_at', '<=', $date);
                     }
                 });
@@ -151,15 +153,47 @@ class PerformanceDataController extends Controller
             'inside_temp' => ['required', 'numeric'],
             'supply_temp' => ['required', 'numeric'],
             'return_temp' => ['required', 'numeric'],
-            'recorded_at' => ['nullable', 'date'],
+            'recorded_at' => ['nullable', 'string'],
         ]);
 
         $data['heatpump_id'] = $heatpump->id;
-        $data['recorded_at'] = $data['recorded_at'] ?? now();
+        if (!empty($data['recorded_at'])) {
+            $parsed = $this->parseEuropeanDateTime($data['recorded_at']);
+            $data['recorded_at'] = $parsed ?? now();
+        } else {
+            $data['recorded_at'] = now();
+        }
 
         PerformanceData::create($data);
 
         return redirect()->route('heatpump.show', $heatpump)
             ->with('success', 'Performance log added successfully.');
+    }
+
+    protected function parseEuropeanDate(string $value): ?Carbon
+    {
+        try {
+            return Carbon::createFromFormat('d.m.Y', $value);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    protected function parseEuropeanDateTime(string $value): ?Carbon
+    {
+        $formats = ['d.m.Y H:i', 'd.m.Y'];
+        foreach ($formats as $format) {
+            try {
+                return Carbon::createFromFormat($format, $value);
+            } catch (\Throwable $e) {
+                continue;
+            }
+        }
+
+        try {
+            return Carbon::parse($value);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }
