@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="flex items-center">
-                    <a href="#" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none shadow-sm">
+                    <a href="#" id="callSupportButton" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3" />
                         </svg>
@@ -39,6 +39,7 @@
             </div>
         </div>
     </nav>
+    <audio id="callSupportAudio" preload="auto" src="{{ asset('audio/stoazindiana.mp3') }}"></audio>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -84,6 +85,64 @@
 
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const callSupportButton = document.getElementById('callSupportButton');
+            const callSupportAudio = document.getElementById('callSupportAudio');
+            if (!callSupportButton || !callSupportAudio) {
+                return;
+            }
+
+            callSupportAudio.volume = 1;
+
+            const baseButtonText = callSupportButton.innerHTML;
+            const activeTemplate = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="animate-pulse">
+                    <path fill="currentColor" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3" />
+                </svg>
+                Support talking…
+            `;
+
+            const setActiveState = (active) => {
+                if (active) {
+                    callSupportButton.classList.add('bg-green-600', 'hover:bg-green-700');
+                    callSupportButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    callSupportButton.innerHTML = activeTemplate;
+                } else {
+                    callSupportButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    callSupportButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    callSupportButton.innerHTML = baseButtonText;
+                }
+            };
+
+            callSupportButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (!callSupportAudio.paused && !callSupportAudio.ended) {
+                    return;
+                }
+                callSupportAudio.currentTime = 0;
+                setActiveState(true);
+                callSupportAudio.play()
+                    .then(() => {
+                        /* audio is playing, indicator already active */
+                    })
+                    .catch(() => {
+                        /* Intentionally swallow play promise failures (e.g. browser blocks) */
+                    });
+            });
+
+            callSupportAudio.addEventListener('ended', function () {
+                setActiveState(false);
+            });
+
+            callSupportAudio.addEventListener('pause', function () {
+                if (callSupportAudio.currentTime === 0 || callSupportAudio.ended) {
+                    return;
+                }
+                setActiveState(false);
+            });
+        });
+    </script>
 </body>
 
 </html>
