@@ -33,7 +33,7 @@ class HeatpumpController extends Controller
      */
     public function store(Request $request)
     {
-    
+
 
         $data = $request->validate([
             "name" => "required|string|max:128",
@@ -68,7 +68,14 @@ class HeatpumpController extends Controller
      */
     public function update(Request $request, Heatpump $heatpump)
     {
-        //
+        $data = $request->validate([
+            "name" => "required|string|max:128",
+            "type" => ["required", new Enum(HeatpumpType::class)]
+        ]);
+        $heatpump->update($data);
+
+        return redirect()->route("heatpump.show", $heatpump)
+            ->with("success", "Heatpump updated successfully");
     }
 
     public function datatablesDemo()
@@ -92,12 +99,13 @@ class HeatpumpController extends Controller
                 'recordsTotal' => 0,
                 'recordsFiltered' => 0,
                 'data' => [],
-                'error' => 'Could not load heatpumps: '.$e->getMessage(),
+                'error' => 'Could not load heatpumps: ' . $e->getMessage(),
             ]);
         }
     }
 
-    public function delete(Heatpump $heatpump){
+    public function delete(Heatpump $heatpump)
+    {
         return view("heatpump.delete", compact("heatpump"));
     }
 
