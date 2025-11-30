@@ -45,11 +45,6 @@ Route::delete("/heatpumps/{heatpump}", [HeatpumpController::class,"destroy"])->n
 
 
 
-Route::match(['get', 'post'], '/api/heatpumps', [HeatpumpController::class, 'getHeatpumpData'])
-    ->withoutMiddleware('web')
-    ->middleware('api')
-    ->name('heatpump.data');
-
 
 //Performance Data aka. Logs
 Route::get("/performance", [PerformanceDataController::class, "index"])->name("performance.list");
@@ -57,10 +52,10 @@ Route::get('/heatpumps/{heatpump}/logs/create', [PerformanceDataController::clas
 Route::post('/heatpumps/{heatpump}/logs', [PerformanceDataController::class, 'storeForHeatpump'])->name('performance.store');
 
 
-Route::match(['get', 'post'], '/api/performance-data', [PerformanceDataController::class, 'data'])
-    ->withoutMiddleware('web')
-    ->middleware('api')
+//For Performance View
+Route::get( '/api/performance-data', [PerformanceDataController::class, 'data'])
     ->name('performance.data');
+
 
 Route::delete('/performance-data/{performanceData}', [PerformanceDataController::class, 'destroy'])
     ->name('performance.data.delete');

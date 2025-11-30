@@ -78,12 +78,7 @@ class HeatpumpController extends Controller
             ->with("success", "Heatpump updated successfully");
     }
 
-    public function datatablesDemo()
-    {
-        $heatpumps = Heatpump::all();
-
-        return view('heatpump.datatables', compact('heatpumps'));
-    }
+   
 
     public function getHeatpumpData(Request $request): JsonResponse
     {

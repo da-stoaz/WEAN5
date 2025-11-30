@@ -15,9 +15,9 @@ class PerformanceDataController extends Controller
      */
     public function index()
     {
-        $data = PerformanceData::orderBy("created_at","desc");
+        //$data = PerformanceData::orderBy("created_at","desc");
         $heatpumps = Heatpump::orderBy('name')->get(['id', 'name']);
-        return view("performance.list", compact("data", "heatpumps"));
+        return view("performance.list", compact( "heatpumps"));
     }
 
     /**
