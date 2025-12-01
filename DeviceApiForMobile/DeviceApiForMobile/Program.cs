@@ -1,3 +1,6 @@
+using DeviceApiForMobile.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace DeviceApiForMobile;
 
 public class Program
@@ -8,6 +11,11 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddAuthorization();
+
+        builder.Services.AddDbContext<DeviceDbContext>(options =>
+        {
+            options.UseSqlite("Data Source=device.db");
+        });
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();

@@ -84,6 +84,7 @@
     </div>
 
     <div class="relative overflow-x-auto bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+        <h3 class="font-semibold">Yajra Logs</h3>
         <table id="performanceTableServer" class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -95,9 +96,32 @@
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return (°C)</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recorded at</th>
                 </tr>
+                <tr class="bg-white">
+                    <th class="px-3 py-2">
+                        <input data-column="0" type="number" placeholder="Search ID" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="1" type="text" placeholder="Search heatpump" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="2" type="number" step="0.1" placeholder="Search outside" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="3" type="number" step="0.1" placeholder="Search inside" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="4" type="number" step="0.1" placeholder="Search supply" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="5" type="number" step="0.1" placeholder="Search return" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                    <th class="px-3 py-2">
+                        <input data-column="6" type="text" placeholder="Search date" class="column-filter w-full rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:ring-blue-500" />
+                    </th>
+                </tr>
             </thead>
             <tbody>
-                {{-- Server-Side DataTable füllt die Zeilen --}}
+                {{-- Server-Side DataTable --}}
             </tbody>
         </table>
     </div>
@@ -109,6 +133,37 @@
 </div>
 
 <style>
+    /* DataTables processing overlay */
+    #performanceTableServer_processing {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        z-index: 20;
+    }
+
+    .dt-spinner__circle {
+        width: 26px;
+        height: 26px;
+        border: 3px solid #cbd5e1;
+        border-top-color: #2563eb;
+        border-radius: 50%;
+        animation: dt-spin 1s linear infinite;
+    }
+
+    @keyframes dt-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <script>
@@ -119,10 +174,11 @@
         const heatpumpSelect = $('#heatpumpSelect');
 
         const performanceTable = $('#performanceTableServer').DataTable({
-            processing: false,
+            processing: true,
             serverSide: true,
             pageLength: 10,
             stateSave: true,
+            orderCellsTop: true,
             ajax: {
                 url: "{{ route('performance.data', absolute: false) }}",
                 type: "GET",
@@ -138,7 +194,7 @@
                 }
             },
             language: {
-                processing: ""
+                processing: `<span class="dt-spinner__circle" aria-hidden="true"></span><span>Loading data…</span>`
             },
             columns: [{
                     data: 'id'
@@ -183,6 +239,28 @@
             ],
             autoWidth: false,
             initComplete: function() {
+                const api = this.api();
+                const $columnFilters = $('#performanceTableServer thead .column-filter');
+
+                api.columns().every(function() {
+                    const column = this;
+                    const idx = column.index();
+                    const $input = $columnFilters.filter(`[data-column="${idx}"]`);
+                    if (!$input.length) return;
+
+                    // restore state
+                    const currentSearch = column.search();
+                    if (currentSearch) {
+                        $input.val(currentSearch);
+                    }
+
+                    $input.on('keyup change', function() {
+                        const val = this.value;
+                        if (val === column.search()) return;
+                        column.search(val).draw();
+                    });
+                });
+
                 toggleBackToTop();
             },
             drawCallback: function() {
