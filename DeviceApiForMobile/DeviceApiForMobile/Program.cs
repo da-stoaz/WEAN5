@@ -1,5 +1,8 @@
 using DeviceApiForMobile.Data;
+using DeviceApiForMobile.DeviceInfo;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 namespace DeviceApiForMobile;
 
@@ -12,10 +15,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddAuthorization();
 
-        builder.Services.AddDbContext<DeviceDbContext>(options =>
-        {
-            options.UseSqlite("Data Source=device.db");
-        });
+        builder.Services.AddDbContext<DeviceDbContext>(options => { options.UseSqlite("Data Source=device.db"); });
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -25,6 +25,7 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.MapScalarApiReference();
             app.MapOpenApi();
         }
 
@@ -32,24 +33,59 @@ public class Program
 
         app.UseAuthorization();
 
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+     
 
-        app.MapGet("/weatherforecast", (HttpContext httpContext) =>
+        app.MapGet("/devices", async (DeviceDbContext db) =>
             {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                        new WeatherForecast
-                        {
-                            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            TemperatureC = Random.Shared.Next(-20, 55),
-                            Summary = summaries[Random.Shared.Next(summaries.Length)]
-                        })
-                    .ToArray();
-                return forecast;
+                var devices = await db.DeviceInfos.ToListAsync();
+                return Results.Ok(devices);
             })
-            .WithName("GetWeatherForecast");
+            .WithName("GetDevices");
+
+        app.MapPost("/devices", async (CreateDeviceInfoModel createInfo, DeviceDbContext db) =>
+            {
+                var device = new DeviceInfo.DeviceInfo
+                {
+                    DeviceName = createInfo.DeviceName,
+                    Manufacturer = createInfo.Manufacturer,
+                    Description = createInfo.Description,
+                    SerialNumber = createInfo.SerialNumber,
+                    UpdatedAt =  DateTime.UtcNow
+                };
+                db.DeviceInfos.Add(device);
+                await db.SaveChangesAsync();
+                return Results.Created($"/devices/{device.Id}", device);
+            })
+            .WithName("CreateDevice");
+        
+        app.MapPut("/devices/{id}", async (Guid id, CreateDeviceInfoModel updateInfo, DeviceDbContext db) =>
+        {
+            var device = await db.DeviceInfos.FindAsync(id);
+            if (device == null)
+                return Results.NotFound();
+            
+            device.DeviceName = updateInfo.DeviceName;
+            device.Manufacturer = updateInfo.Manufacturer;
+            device.Description = updateInfo.Description;
+            device.SerialNumber = updateInfo.SerialNumber;
+            device.UpdatedAt = DateTime.UtcNow;
+            
+            await db.SaveChangesAsync();
+            return Results.Ok(device);
+        }).WithName("UpdateDevice");
+
+        app.MapDelete("/devices/{id}", async (Guid id, DeviceDbContext db) =>
+        {
+            var info = await db.DeviceInfos.FindAsync(id);
+            if (info == null)
+                return Results.NotFound();
+            
+            db.DeviceInfos.Remove(info);
+            await db.SaveChangesAsync();
+            
+            return Results.NoContent();
+        }).WithName("DeleteDevice");
+
 
         app.Run();
     }

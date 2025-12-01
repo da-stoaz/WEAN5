@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DeviceApiForMobile;
+namespace DeviceApiForMobile.DeviceInfo;
 
 public class DeviceInfo
 {
@@ -19,5 +19,5 @@ public class DeviceInfo
     [MaxLength(250)]
     public string? Description { get; set; } = string.Empty;
     
-    public DateTime LastSeen { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }
