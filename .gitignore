@@ -22,8 +22,15 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# .NET
 *.idea/
 *bin/
 *obj/
+*Migrations/
 
+# SQLite temp files
+*.db-shm
+*.db-wal
+
+# Docker Container Volume
 *lara_mysql_data/
