@@ -64,11 +64,10 @@ public class Program
             if (device == null)
                 return Results.NotFound();
             
-            device.DeviceName = updateInfo.DeviceName;
-            device.Manufacturer = updateInfo.Manufacturer;
-            device.Description = updateInfo.Description;
-            device.SerialNumber = updateInfo.SerialNumber;
+   
+            db.Entry(device).CurrentValues.SetValues(updateInfo);
             device.UpdatedAt = DateTime.UtcNow;
+
             
             await db.SaveChangesAsync();
             return Results.Ok(device);
