@@ -33,7 +33,6 @@ public class Program
 
         app.UseAuthorization();
 
-     
 
         app.MapGet("/devices", async (DeviceDbContext db) =>
             {
@@ -50,25 +49,25 @@ public class Program
                     Manufacturer = createInfo.Manufacturer,
                     Description = createInfo.Description,
                     SerialNumber = createInfo.SerialNumber,
-                    UpdatedAt =  DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow
                 };
                 db.DeviceInfos.Add(device);
                 await db.SaveChangesAsync();
                 return Results.Created($"/devices/{device.Id}", device);
             })
             .WithName("CreateDevice");
-        
+
         app.MapPut("/devices/{id}", async (Guid id, CreateDeviceInfoModel updateInfo, DeviceDbContext db) =>
         {
             var device = await db.DeviceInfos.FindAsync(id);
             if (device == null)
                 return Results.NotFound();
-            
-   
+
+
             db.Entry(device).CurrentValues.SetValues(updateInfo);
             device.UpdatedAt = DateTime.UtcNow;
 
-            
+
             await db.SaveChangesAsync();
             return Results.Ok(device);
         }).WithName("UpdateDevice");
@@ -78,10 +77,10 @@ public class Program
             var info = await db.DeviceInfos.FindAsync(id);
             if (info == null)
                 return Results.NotFound();
-            
+
             db.DeviceInfos.Remove(info);
             await db.SaveChangesAsync();
-            
+
             return Results.NoContent();
         }).WithName("DeleteDevice");
 
