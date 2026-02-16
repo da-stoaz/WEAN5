@@ -58,6 +58,7 @@ export default function DevicesScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [editingDevice, setEditingDevice] = useState<Device | null>(null);
   const [form, setForm] = useState<DevicePayload>(EMPTY_FORM);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   const isConfigured = baseUrl.length > 0;
 
@@ -120,6 +121,7 @@ export default function DevicesScreen() {
   function openCreateModal() {
     setEditingDevice(null);
     setForm(EMPTY_FORM);
+    setValidationMessage(null);
     setModalVisible(true);
   }
 
@@ -131,6 +133,7 @@ export default function DevicesScreen() {
       serialNumber: device.serialNumber ?? "",
       description: device.description ?? "",
     });
+    setValidationMessage(null);
     setModalVisible(true);
   }
 
@@ -138,15 +141,20 @@ export default function DevicesScreen() {
     setModalVisible(false);
     setEditingDevice(null);
     setForm(EMPTY_FORM);
+    setValidationMessage(null);
   }
 
   function submitForm() {
     const payload = normalizePayload(form);
 
     if (!payload.deviceName || !payload.manufacturer) {
-      showError("Validation failed", "Device name and manufacturer are required.");
+      const message = "Device name and manufacturer are required.";
+      setValidationMessage(message);
+      showError("Validation failed", message);
       return;
     }
+
+    setValidationMessage(null);
 
     if (editingDevice) {
       updateMutation.mutate({ id: editingDevice.id, payload });
@@ -282,6 +290,7 @@ export default function DevicesScreen() {
         animationType="slide"
         visible={isModalVisible}
         presentationStyle={Platform.OS === "ios" ? "pageSheet" : "fullScreen"}
+        allowSwipeDismissal
         onRequestClose={closeModal}
       >
         <SafeAreaView style={styles.modalScreen}>
@@ -293,65 +302,91 @@ export default function DevicesScreen() {
               contentContainerStyle={styles.modalContent}
               keyboardShouldPersistTaps="handled"
             >
-              <Text style={styles.modalTitle}>
-                {editingDevice ? "Update device" : "Create device"}
-              </Text>
+              <View style={styles.modalCard}>
+                <Text style={styles.modalTitle}>
+                  {editingDevice ? "Update device" : "Create device"}
+                </Text>
 
-              <TextInput
-                style={styles.input}
-                value={form.deviceName}
-                onChangeText={(deviceName) => setForm((prev) => ({ ...prev, deviceName }))}
-                placeholder="Device name"
-                placeholderTextColor="#64748B"
-              />
-
-              <TextInput
-                style={styles.input}
-                value={form.manufacturer}
-                onChangeText={(manufacturer) =>
-                  setForm((prev) => ({ ...prev, manufacturer }))
-                }
-                placeholder="Manufacturer"
-                placeholderTextColor="#64748B"
-              />
-
-              <TextInput
-                style={styles.input}
-                value={form.serialNumber ?? ""}
-                onChangeText={(serialNumber) =>
-                  setForm((prev) => ({ ...prev, serialNumber }))
-                }
-                placeholder="Serial number"
-                placeholderTextColor="#64748B"
-              />
-
-              <TextInput
-                style={[styles.input, styles.multilineInput]}
-                value={form.description ?? ""}
-                onChangeText={(description) =>
-                  setForm((prev) => ({ ...prev, description }))
-                }
-                placeholder="Description"
-                placeholderTextColor="#64748B"
-                multiline
-              />
-
-              {formError ? <Text style={styles.formError}>{formError}</Text> : null}
-
-              <View style={styles.modalActions}>
-                <Pressable style={styles.secondaryButton} onPress={closeModal}>
-                  <Text style={styles.secondaryButtonText}>Cancel</Text>
-                </Pressable>
-
-                <Pressable
-                  style={[styles.primaryButton, isSaving && styles.disabledButton]}
-                  onPress={submitForm}
-                  disabled={isSaving}
-                >
-                  <Text style={styles.primaryButtonText}>
-                    {isSaving ? "Saving..." : "Save"}
+                <View style={styles.fieldGroup}>
+                  <Text style={styles.fieldLabel}>
+                    Device name
+                    <Text style={styles.requiredMark}> *</Text>
                   </Text>
-                </Pressable>
+                  <TextInput
+                    style={styles.input}
+                    value={form.deviceName}
+                    onChangeText={(deviceName) =>
+                      setForm((prev) => ({ ...prev, deviceName }))
+                    }
+                    placeholder="e.g., iPhone 16 Pro Max"
+                    placeholderTextColor="#64748B"
+                  />
+                </View>
+
+                <View style={styles.fieldGroup}>
+                  <Text style={styles.fieldLabel}>
+                    Manufacturer
+                    <Text style={styles.requiredMark}> *</Text>
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={form.manufacturer}
+                    onChangeText={(manufacturer) =>
+                      setForm((prev) => ({ ...prev, manufacturer }))
+                    }
+                    placeholder="e.g., Apple"
+                    placeholderTextColor="#64748B"
+                  />
+                </View>
+
+                <View style={styles.fieldGroup}>
+                  <Text style={styles.fieldLabel}>Serial number</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={form.serialNumber ?? ""}
+                    onChangeText={(serialNumber) =>
+                      setForm((prev) => ({ ...prev, serialNumber }))
+                    }
+                    placeholder="e.g., ABCDEFGH-013333"
+                    placeholderTextColor="#64748B"
+                  />
+                </View>
+
+                <View style={styles.fieldGroup}>
+                  <Text style={styles.fieldLabel}>Description</Text>
+                  <TextInput
+                    style={[styles.input, styles.multilineInput]}
+                    value={form.description ?? ""}
+                    onChangeText={(description) =>
+                      setForm((prev) => ({ ...prev, description }))
+                    }
+                    placeholder="Short notes about this device"
+                    placeholderTextColor="#64748B"
+                    multiline
+                  />
+                </View>
+
+                {validationMessage || formError ? (
+                  <Text style={styles.formError}>
+                    {validationMessage ?? formError}
+                  </Text>
+                ) : null}
+
+                <View style={styles.modalActions}>
+                  <Pressable style={styles.secondaryButton} onPress={closeModal}>
+                    <Text style={styles.secondaryButtonText}>Cancel</Text>
+                  </Pressable>
+
+                  <Pressable
+                    style={[styles.primaryButton, isSaving && styles.disabledButton]}
+                    onPress={submitForm}
+                    disabled={isSaving}
+                  >
+                    <Text style={styles.primaryButtonText}>
+                      {isSaving ? "Saving..." : "Save"}
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -522,33 +557,57 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContent: {
-    padding: 18,
-    gap: 10,
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    paddingHorizontal: 18,
+    paddingTop: 54,
     paddingBottom: 28,
   },
+  modalCard: {
+    borderRadius: 20,
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 1,
+  },
   modalTitle: {
-    fontSize: 26,
-    marginTop: 12,
+    fontSize: 22,
     fontWeight: "700",
     color: "#0F172A",
-    marginBottom: 2,
+    marginBottom: 16,
+  },
+  fieldGroup: {
+    marginBottom: 12,
+  },
+  fieldLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#334155",
+    marginBottom: 6,
+  },
+  requiredMark: {
+    color: "#B91C1C",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: "#D4DEE8",
     borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
+    height: 50,
+    fontSize: 17,
     color: "#0F172A",
     backgroundColor: "#F8FAFC",
   },
   multilineInput: {
-    minHeight: 92,
+    height: 118,
+    paddingTop: 12,
     textAlignVertical: "top",
   },
   modalActions: {
-    marginTop: 8,
+    marginTop: 6,
     flexDirection: "row",
     justifyContent: "flex-end",
     gap: 10,
