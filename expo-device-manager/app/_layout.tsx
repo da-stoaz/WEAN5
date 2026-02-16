@@ -62,7 +62,14 @@ export default function RootLayout() {
           </NativeTabs.Trigger>
         </NativeTabs>
 
-        <Toast config={toastConfig} topOffset={64} />
+        <Toast
+          config={toastConfig}
+          position="bottom"
+          bottomOffset={88}
+          keyboardOffset={8}
+          swipeable
+          onPress={() => Toast.hide()}
+        />
       </ApiSettingsProvider>
     </QueryClientProvider>
   );

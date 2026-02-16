@@ -10,6 +10,8 @@ export const toastConfig: ToastConfig = {
         borderRadius: 14,
         backgroundColor: "#F7FFFC",
         width: "92%",
+        zIndex: 9999,
+        elevation: 9999,
       }}
       contentContainerStyle={{ paddingHorizontal: 14 }}
       text1Style={{
@@ -32,6 +34,8 @@ export const toastConfig: ToastConfig = {
         borderRadius: 14,
         backgroundColor: "#FFF8F9",
         width: "92%",
+        zIndex: 9999,
+        elevation: 9999,
       }}
       contentContainerStyle={{ paddingHorizontal: 14 }}
       text1Style={{
