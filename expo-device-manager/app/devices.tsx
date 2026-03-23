@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useApiSettings } from "@/lib/api-settings";
+import { useApiSettings } from "@/lib/api/settings";
 import {
   createDevice,
   deleteDevice,
@@ -24,7 +24,7 @@ import {
   updateDevice,
   type Device,
   type DevicePayload,
-} from "@/lib/device-api";
+} from "@/lib/api/devices";
 import { showError, showSuccess } from "@/lib/toast";
 
 const EMPTY_FORM: DevicePayload = {

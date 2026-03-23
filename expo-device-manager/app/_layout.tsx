@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import Toast from "react-native-toast-message";
 
 import { toastConfig } from "@/components/toast-config";
-import { ApiSettingsProvider } from "@/lib/api-settings";
-import { queryClient } from "@/lib/query-client";
+import { ApiSettingsProvider } from "@/lib/api/settings";
+import { queryClient } from "@/lib/api/query-client";
 
 export default function RootLayout() {
   return (

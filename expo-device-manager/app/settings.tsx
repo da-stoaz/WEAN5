@@ -14,7 +14,7 @@ import {
   getDefaultApiSettings,
   type ApiProtocol,
   useApiSettings,
-} from "@/lib/api-settings";
+} from "@/lib/api/settings";
 import { showError, showSuccess } from "@/lib/toast";
 
 const PROTOCOLS: ApiProtocol[] = ["http://", "https://"];
