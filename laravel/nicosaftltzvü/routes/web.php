@@ -14,13 +14,14 @@ Route::get("test", function () {
 //List
 Route::get("invoice", [InvoiceController::class, 'index'])->name("invoice.list");
 
+
 //Create Routes
 Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
 Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
 
 
 //Update Routes
-Route::get("/invoice/edit", [InvoiceController::class, "edit"])->name('invoice.create');
+Route::get("/invoice/edit", [InvoiceController::class, "edit"])->name('invoice.edit');
 Route::put('/invoice/{id}', [InvoiceController::class, 'update'])->name('invoice.update');
 
 //Delete Routes

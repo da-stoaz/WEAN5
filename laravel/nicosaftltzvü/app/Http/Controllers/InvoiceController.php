@@ -14,8 +14,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $data = DB::table('invoice')->get();
-        return view('invoice.list', compact(var_name: 'data'));
+        $invoices = DB::table('invoice')->get();
+        return view('invoice.list', compact(var_name: 'invoices'));
     }
 
     /**
@@ -60,7 +60,7 @@ class InvoiceController extends Controller
     public function edit(Invoice $invoice)
     {
         // Wenn du später eine Edit-View hast, hier anpassen
-        return view('create-invoices', compact('invoice'));
+        return view('invoice.create', compact('invoice'));
     }
 
     /**
