@@ -52,4 +52,9 @@ public class PublicTransportController(AppDbContext context) : ControllerBase
         await context.SaveChangesAsync();
         return NoContent();
     }
+
+    public async Task<ActionResult<Entities.PublicTransportE?>> Details(int? id)
+    {
+        return await context.PublicTransports.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+    }
 }

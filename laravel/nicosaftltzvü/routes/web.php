@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,15 @@ Route::get("/invoice/edit", [InvoiceController::class, "edit"])->name('invoice.e
 Route::put('/invoice/{id}', [InvoiceController::class, 'update'])->name('invoice.update');
 
 //Delete Routes
-Route::get('/invoice/{id}/delete', [InvoiceController::class, 'show'])->name('invoice.show'); 
+Route::get('/invoice/{id}/delete', [InvoiceController::class, 'show'])->name('invoice.show');
 Route::delete('/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+
+
+
+//Driver Routes
+
+
+Route::get('drivers', [DriverController::class, 'index'])->name('drivers.list');
+Route::get('drivers/create', [DriverController::class, 'create'])->name('drivers.create');
+
+Route::post('drivers', [DriverController::class, 'store'])->name('drivers.store');
